@@ -1,0 +1,171 @@
+# =======================================================================
+# SECURITY & ANTI-HIJACK CONFIGURATION FOR CPANEL
+# Rainbow ACP Website Protection
+# =======================================================================
+
+# Enable RewriteEngine
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # -----------------------------------------------------------------
+    # FORCE HTTPS - Redirect semua traffic ke HTTPS
+    # -----------------------------------------------------------------
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # -----------------------------------------------------------------
+    # BLOCK SUSPICIOUS REDIRECTS & MALICIOUS QUERIES
+    # -----------------------------------------------------------------
+    # Block requests dengan parameter redirect mencurigakan
+    RewriteCond %{QUERY_STRING} (redirect|return|url|next|destination|redir|goto)=http [NC,OR]
+    RewriteCond %{QUERY_STRING} (redirect|return|url|next|destination|redir|goto)=https [NC,OR]
+    RewriteCond %{QUERY_STRING} (redirect|return|url|next|destination|redir|goto)=// [NC]
+    RewriteRule ^(.*)$ / [R=301,L]
+
+    # Block akses ke file konfigurasi dan sensitif
+    RewriteRule ^(.*/)?\.env$ - [F,L]
+    RewriteRule ^(.*/)?\.git - [F,L]
+    RewriteRule ^(.*/)?package\.json$ - [F,L]
+    RewriteRule ^(.*/)?next\.config\.(js|ts)$ - [F,L]
+    RewriteRule ^(.*/)?tsconfig\.json$ - [F,L]
+
+    # -----------------------------------------------------------------
+    # DOMAIN WHITELIST - Hanya izinkan rainbowacp.com
+    # -----------------------------------------------------------------
+    # Jika host bukan rainbowacp.com atau www.rainbowacp.com, redirect ke domain yang benar
+    RewriteCond %{HTTP_HOST} !^rainbowacp\.com$ [NC]
+    RewriteCond %{HTTP_HOST} !^www\.rainbowacp\.com$ [NC]
+    RewriteCond %{HTTP_HOST} !^localhost(:[0-9]+)?$ [NC]
+    RewriteRule ^(.*)$ https://rainbowacp.com/$1 [R=301,L]
+
+    # Redirect www ke non-www (atau sebaliknya, sesuai preferensi)
+    RewriteCond %{HTTP_HOST} ^www\.rainbowacp\.com$ [NC]
+    RewriteRule ^(.*)$ https://rainbowacp.com/$1 [R=301,L]
+
+    # -----------------------------------------------------------------
+    # BLOCK MALICIOUS USER AGENTS & BOTS
+    # -----------------------------------------------------------------
+    RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^(-|.*(?:libwww|lwp-trivial|curl|wget|python|nikto|scan|acunetix|sqlmap)) [NC]
+    RewriteRule .* - [F,L]
+
+    # -----------------------------------------------------------------
+    # NEXT.JS SPECIFIC ROUTING
+    # -----------------------------------------------------------------
+    # Jangan rewrite file statis yang ada
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Route semua request lain ke Next.js
+    RewriteRule ^ index.html [L]
+</IfModule>
+
+# =======================================================================
+# SECURITY HEADERS
+# =======================================================================
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header always set X-Frame-Options "DENY"
+    Header always set Content-Security-Policy "frame-ancestors 'none';"
+
+    # XSS Protection
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set X-Content-Type-Options "nosniff"
+
+    # HSTS - Force HTTPS for 2 years
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
+    # Referrer Policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Permissions Policy - Disable unnecessary features
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+
+    # Remove Server signature
+    Header always unset X-Powered-By
+    Header always unset Server
+
+    # Content Security Policy
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
+</IfModule>
+
+# =======================================================================
+# BLOCK ACCESS TO SENSITIVE FILES
+# =======================================================================
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "\.(env|git|htaccess|htpasswd|ini|log|sh|sql|conf|config|json|lock|md|yml|yaml)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# =======================================================================
+# DISABLE DIRECTORY LISTING
+# =======================================================================
+Options -Indexes
+
+# =======================================================================
+# COMPRESSION FOR BETTER PERFORMANCE
+# =======================================================================
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# =======================================================================
+# BROWSER CACHING
+# =======================================================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/json "access plus 0 seconds"
+    ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# =======================================================================
+# BLOCK SQL INJECTION & XSS ATTEMPTS
+# =======================================================================
+<IfModule mod_rewrite.c>
+    # Block SQL injection attempts
+    RewriteCond %{QUERY_STRING} [a-zA-Z0-9_]=http:// [OR]
+    RewriteCond %{QUERY_STRING} [a-zA-Z0-9_]=https:// [OR]
+    RewriteCond %{QUERY_STRING} [a-zA-Z0-9_]=(\.\.//?)+ [OR]
+    RewriteCond %{QUERY_STRING} [a-zA-Z0-9_]=/([a-z0-9_.]//?)+ [NC,OR]
+    RewriteCond %{QUERY_STRING} (union|select|insert|drop|delete|update|concat|alter|create|declare) [NC]
+    RewriteRule ^(.*)$ / [R=301,L]
+
+    # Block XSS attempts
+    RewriteCond %{QUERY_STRING} (<|%3C).*script.*(>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
+    RewriteRule ^(.*)$ / [R=301,L]
+</IfModule>
+
+# =======================================================================
+# PHP SECURITY (if PHP is used)
+# =======================================================================
+<IfModule mod_php7.c>
+    php_flag display_errors Off
+    php_flag log_errors On
+    php_flag expose_php Off
+    php_value session.cookie_httponly 1
+    php_value session.cookie_secure 1
+</IfModule>
+
+# =======================================================================
+# ERROR DOCUMENTS
+# =======================================================================
+ErrorDocument 403 /
+ErrorDocument 404 /
+ErrorDocument 500 /
