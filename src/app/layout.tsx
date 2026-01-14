@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://rainbowacp.com",
+    // url: "https://rainbowacp.com",
     title: "ACP Panel Indonesia | Aluminium Composite Panel Berkualitas",
     description:
       "Distributor dan supplier ACP (Aluminium Composite Panel) berkualitas tinggi di Indonesia. Konsultasi gratis!",
