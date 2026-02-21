@@ -44,9 +44,10 @@ const Navbar: React.FC = () => {
 
   const navItems = [
     { name: 'Beranda', href: '/' },
-    { name: 'Produk', href: '/pages/produk' },
-    { name: 'Distributor', href: '/pages/distributor' },
-    { name: 'Instalasi', href: '/pages/instalasi' }
+    { name: 'Produk', href: '/produk' },
+    { name: 'Distributor', href: '/distributor' },
+    { name: 'Instalasi', href: '/instalasi' },
+    { name: 'Blog', href: '/blog' }
   ];
 
   const isActive = (href: string) => {
@@ -163,7 +164,7 @@ const Navbar: React.FC = () => {
           
           <div className="px-6 pt-4 pb-6">
             <Link
-              href="/pages/kontak"
+              href="/kontak"
               className="block w-full text-center bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl text-sm font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
               onClick={() => setIsMenuOpen(false)}>
               Hubungi Kami

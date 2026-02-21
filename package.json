@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "node app.js",
     "lint": "eslint",
     "analyze": "cross-env ANALYZE=true next build",
@@ -23,6 +23,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "html-react-parser": "^5.2.16",
     "lucide-react": "^0.542.0",
     "next": "^16.1.1",
     "react": "19.1.0",
