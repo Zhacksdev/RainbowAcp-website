@@ -11,8 +11,8 @@ Disallow: /_next/static/
 Disallow: /test/
 
 # Sitemaps
-Sitemap: https://www.yourwebsite.com/sitemap.xml
-Sitemap: https://www.yourwebsite.com/sitemap-0.xml
+Sitemap: https://www.rainbowacp.com/sitemap.xml
+Sitemap: https://www.rainbowacp.com/sitemap-0.xml
 
 # Crawl-delay untuk mencegah overload
 Crawl-delay: 1

@@ -11,7 +11,7 @@ interface PageMetadataProps {
   canonical?: string;
 }
 
-const baseUrl = "https://www.yourwebsite.com"; // Ganti dengan domain Anda
+const baseUrl = "https://www.rainbowacp.com"; // Ganti dengan domain Anda
 const siteName = "ACP Panel Indonesia - Rainbow ACP";
 const defaultDescription =
   "Distributor dan supplier ACP (Aluminium Composite Panel) berkualitas tinggi di Indonesia. Tersedia berbagai merk dan ukuran dengan harga kompetitif. Konsultasi gratis!";

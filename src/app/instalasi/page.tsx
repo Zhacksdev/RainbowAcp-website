@@ -98,7 +98,7 @@ export default function InstalasiPage() {
         <meta property="og:image" content="/assets/images/instalasi/instalasi-hero.webp" />
         <meta name="author" content="Rainbow ACP" />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://yourwebsite.com/instalasi" />
+        <link rel="canonical" href="https://rainbowacp.com/instalasi" />
         
         <script type="application/ld+json">
           {JSON.stringify({

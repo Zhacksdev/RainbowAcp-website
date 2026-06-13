@@ -7,7 +7,7 @@
 
 export const SITE_CONFIG = {
   name: process.env.NEXT_PUBLIC_SITE_NAME || "ACP Panel Indonesia - Rainbow ACP",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.yourwebsite.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.rainbowacp.com",
   description:
     process.env.NEXT_PUBLIC_META_DESCRIPTION ||
     "Distributor dan supplier ACP (Aluminium Composite Panel) berkualitas tinggi di Indonesia. Tersedia berbagai merk dan ukuran dengan harga kompetitif. Konsultasi gratis!",
@@ -28,7 +28,7 @@ export const CONTACT_INFO = {
     url: `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6282228211989"}`,
     message: "Halo, saya mau tanya tentang produk ACP",
   },
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "info@yourwebsite.com",
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "info@rainbowacp.com",
   phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+62-822-2821-1989",
   address: {
     street: process.env.NEXT_PUBLIC_ADDRESS || "Jl. Raya ACP No. 123",

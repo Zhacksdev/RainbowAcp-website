@@ -118,7 +118,7 @@ export default function DistributorPage() {
         />
         <meta name="author" content="Rainbow ACP" />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://yourwebsite.com/distributor" />
+        <link rel="canonical" href="https://rainbowacp.com/distributor" />
 
         <script type="application/ld+json">
           {JSON.stringify({
@@ -127,7 +127,7 @@ export default function DistributorPage() {
             name: "Rainbow ACP",
             description:
               "Distributor Aluminium Composite Panel terpercaya di Indonesia",
-            url: "https://yourwebsite.com",
+            url: "https://rainbowacp.com",
             contactPoint: distributors.map((distributor) => ({
               "@type": "ContactPoint",
               telephone: distributor.phone,
